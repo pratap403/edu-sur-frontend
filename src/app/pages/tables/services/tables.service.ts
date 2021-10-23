@@ -1,14 +1,16 @@
+import {Customer, Employee} from '../models';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-
-import {Customer, Employee} from '../models';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TablesService {
-  public loadEmployeeTableData(): Observable<Employee[]> {
-    return of([
+
+  public loadEmployeeTableData(): any {
+    return [
       {name: 'Joe James', company: 'Example Inc.', city: 'Yonkers', state: 'NY'},
       {name: 'John Walsh', company: 'Example Inc.', city: 'Hartford', state: 'CT'},
       {name: 'Bob Herm', company: 'Example Inc.', city: 'Tampa', state: 'FL'},
@@ -26,7 +28,7 @@ export class TablesService {
       {name: 'Avram Sylva', company: 'Example Inc.', city: 'Hartford', state: 'CT'},
       {name: 'Serafima Babatunde', company: 'Example Inc.', city: 'Tampa', state: 'FL'},
       {name: 'Gaston Festus', company: 'Example Inc.', city: 'Tampa', state: 'FL'}
-    ]);
+    ]
   }
 
   public loadMaterialTableData(): Observable<Customer[]> {
@@ -78,4 +80,69 @@ export class TablesService {
       }
     ]);
   }
+
+  BASE_URL = environment.apiBaseUrl;
+
+  constructor(public http: HttpClient) { }
+
+  getAdminSurveyList(): Observable<any> {
+    try {
+      const apiUrl = `${this.BASE_URL}/admin/get-survey-list`;
+      return this.http.get(apiUrl, {
+        headers: new HttpHeaders()
+          .set('Authorization', `Bearer ${localStorage.getItem('token')}`),
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  getUserList(): Observable<any> {
+    try {
+      const apiUrl = `${this.BASE_URL}/admin/get-user-list`;
+      return this.http.get(apiUrl, {
+        headers: new HttpHeaders()
+          .set('Authorization', `Bearer ${localStorage.getItem('token')}`),
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  getUserSurveyLogList(): Observable<any> {
+    try {
+      const apiUrl = `${this.BASE_URL}/admin/get-user-survey-list`;
+      return this.http.get(apiUrl, {
+        headers: new HttpHeaders()
+          .set('Authorization', `Bearer ${localStorage.getItem('token')}`),
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  sendSurveyInviteToUser(data: any): Observable<any> {
+    try {
+      const apiUrl = `${this.BASE_URL}/admin/send-users-invite`;
+      return this.http.post(apiUrl,data, {
+        headers: new HttpHeaders()
+          .set('Authorization', `Bearer ${localStorage.getItem('token')}`),
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  userSurveyList(): Observable<any> {
+    try {
+      const apiUrl = `${this.BASE_URL}/user/get-survey-list`;
+      return this.http.get(apiUrl, {
+        headers: new HttpHeaders()
+          .set('Authorization', `Bearer ${localStorage.getItem('token')}`),
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
 }

@@ -11,13 +11,16 @@ import { YearPipe } from './pipes';
 import { AuthService, EmailService } from './services';
 import { LoginFormComponent, SignFormComponent } from './components';
 import { AuthGuard } from './guards';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
     AuthPageComponent,
     YearPipe,
     LoginFormComponent,
-    SignFormComponent
+    SignFormComponent,
   ],
   imports: [
     CommonModule,
@@ -26,7 +29,10 @@ import { AuthGuard } from './guards';
     MatButtonModule,
     MatInputModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule
   ],
   providers: [
     AuthService,

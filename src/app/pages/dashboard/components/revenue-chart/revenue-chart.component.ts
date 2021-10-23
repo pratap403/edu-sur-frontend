@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { RevenueChartData } from '../../models';
-import {colors} from '../../../../consts';
+import { colors } from '../../../../consts';
 
 @Component({
   selector: 'app-revenue-chart',
@@ -9,24 +9,26 @@ import {colors} from '../../../../consts';
   styleUrls: ['./revenue-chart.component.scss']
 })
 export class RevenueChartComponent implements OnInit {
-  @Input() revenueCharData: RevenueChartData;
+  @Input() revenueCharData: any;
   public revenueChart: any;
   public colors: typeof colors = colors;
 
   public ngOnInit(): void {
-    this.initChart();
+    setTimeout(() => {
+      this.initChart();
+    }, 300);
   }
 
   public initChart(): void {
     this.revenueChart = {
-      color: [colors.GREEN, colors.PINK, colors.YELLOW, colors.BLUE],
+      color: [colors.GREEN, colors.YELLOW],
       tooltip: {
         trigger: 'item'
       },
       legend: {
         top: 'center',
         right: 'right',
-        data: ['Group A', 'Group B', 'Group C', 'Group D'],
+        data: ['Submitted', 'Pending'],
         textStyle: {
           color: '#6E6E6E'
         }
@@ -47,21 +49,13 @@ export class RevenueChartComponent implements OnInit {
         avoidLabelOverlap: false,
         data: [
           {
-            name: 'Group A',
-            value: this.revenueCharData.groupA
+            name: 'Submitted',
+            value: this.revenueCharData.submitted
           },
           {
-            name: 'Group B',
-            value: this.revenueCharData.groupB
-          },
-          {
-            name: 'Group C',
-            value: this.revenueCharData.groupC
-          },
-          {
-            name: 'Group D',
-            value: this.revenueCharData.groupD
-          },
+            name: 'Pending',
+            value: this.revenueCharData.pending
+          }
         ]
       }]
     };

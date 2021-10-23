@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
-  hmr: false
+  hmr: false,
+  apiBaseUrl:'http://localhost:8000',
+  appUrl: 'http://localhost:4200/',
+  razorKey: 'rzp_test_A6SWGpN4db7LYP'
 };
 
 /*

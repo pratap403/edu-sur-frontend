@@ -1,19 +1,61 @@
 <mat-card class="support-requests">
   <mat-card-title class="support-requests__header">
-    <h5 class="support-requests__title">Support Requests</h5>
-    <app-settings-menu></app-settings-menu>
+    <h5 class="support-requests__title">User Survey Requests</h5>
   </mat-card-title>
 
   <mat-card-content class="support-requests__content">
     <table mat-table [dataSource]="supportRequestData" class="support-requests__table">
 
-      <ng-container  *ngFor="let column of displayedColumns" matColumnDef="{{column}}" class="support-requests__table-row">
-        <th mat-header-cell *matHeaderCellDef class="support-requests__table-row-title">{{column}}</th>
+      <ng-container matColumnDef="serialNum" class="support-requests__table-row">
+        <th mat-header-cell *matHeaderCellDef class="support-requests__table-row-title">Sr. No.</th>
+        <td mat-cell *matCellDef="let element; let i = index" class="support-requests__table-content">
+          <span>{{i + 1}}.</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="userName" class="support-requests__table-row">
+        <th mat-header-cell *matHeaderCellDef class="support-requests__table-row-title">User Name</th>
         <td mat-cell *matCellDef="let element" class="support-requests__table-content">
-          <span *ngIf="column !== 'status'">{{element[column]}}</span>
-          <div *ngIf="column === 'status'" class="support-requests__content-badge" [ngClass]="element[column]">
-            <span>{{element[column]}}</span>
+          <span>{{element?.userName}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="adminUserName" class="support-requests__table-row">
+        <th mat-header-cell *matHeaderCellDef class="support-requests__table-row-title">Admin User Name</th>
+        <td mat-cell *matCellDef="let element" class="support-requests__table-content">
+          <span>{{element?.adminUserName}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="surveyName" class="support-requests__table-row">
+        <th mat-header-cell *matHeaderCellDef class="support-requests__table-row-title">Survey Name</th>
+        <td mat-cell *matCellDef="let element" class="support-requests__table-content">
+          <span>{{element?.surveyName}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="surveyStatus" class="support-requests__table-row">
+        <th mat-header-cell *matHeaderCellDef class="support-requests__table-row-title">Survey Status</th>
+        <td mat-cell *matCellDef="let element" class="support-requests__table-content">
+          <div class="support-requests__content-badge" [ngClass]=" element?.surveyStatus === 'Pending' ? 'pending' : 'send' ">
+            <span>{{element?.surveyStatus}}</span>
           </div>
+        </td>
+      </ng-container>
+
+      <ng-container *ngIf="userType === 'admin' " matColumnDef="inviteStatus" class="support-requests__table-row">
+        <th mat-header-cell *matHeaderCellDef class="support-requests__table-row-title">Survey Invite Status</th>
+        <td mat-cell *matCellDef="let element" class="support-requests__table-content">
+          <div class="support-requests__content-badge" [ngClass]=" element?.inviteStatus === 'Sent' ? 'send' : 'declined' ">
+            <span>{{element?.inviteStatus}}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="invitationDate" class="support-requests__table-row">
+        <th mat-header-cell *matHeaderCellDef class="support-requests__table-row-title">Invitation Date</th>
+        <td mat-cell *matCellDef="let element" class="support-requests__table-content">
+          <span>{{element?.invitationDate | date: 'dd MMM y'}}</span>
         </td>
       </ng-container>
 

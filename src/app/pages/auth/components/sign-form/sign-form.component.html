@@ -8,7 +8,30 @@
   </mat-form-field>
 
   <mat-form-field class="form__input">
+    <input matInput [matDatepicker]="picker" placeholder="Date Of Birth" formControlName="dob">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="form__input">
+    <mat-select formControlName="gender">
+      <mat-option value="''">Select Gender</mat-option>
+      <mat-option *ngFor="let gender of gender" [value]="gender.value">
+        {{gender.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="form__input">
     <input matInput placeholder="Password" type="password" formControlName="password">
+  </mat-form-field>
+
+  <mat-form-field class="form__input">
+    <input matInput placeholder="Confirm Password" type="password" formControlName="passwordConfirmation">
+    <mat-error
+      *ngIf="form.get('passwordConfirmation').hasError('confirmedValidator')">
+      Passwords must match
+    </mat-error>
   </mat-form-field>
 
   <div class="form-actions">

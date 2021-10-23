@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { lastValueFrom, Observable } from 'rxjs';
 
 import { DashboardService } from '../../services';
 import {
@@ -11,6 +11,7 @@ import {
   SupportRequestData,
   VisitsChartData
 } from '../../models';
+import { ErrorHandlerService } from 'src/app/shared/error-handler.service';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -18,21 +19,52 @@ import {
   styleUrls: ['./dashboard-page.component.scss']
 })
 export class DashboardPageComponent {
-  public dailyLineChartData$: Observable<DailyLineChartData>;
-  public performanceChartData$: Observable<PerformanceChartData>;
-  public revenueChartData$: Observable<RevenueChartData>;
-  public serverChartData$: Observable<ServerChartData>;
-  public supportRequestData$: Observable<SupportRequestData[]>;
-  public visitsChartData$: Observable<VisitsChartData>;
-  public projectsStatsData$: Observable<ProjectStatData>;
+  public revenueChartData$: any;
+  public supportRequestData$: any;
+  public visitsChartData$: any;
+  userType: any;
 
-  constructor(private service: DashboardService) {
-    this.dailyLineChartData$ = this.service.loadDailyLineChartData();
-    this.performanceChartData$ = this.service.loadPerformanceChartData();
-    this.revenueChartData$ = this.service.loadRevenueChartData();
-    this.serverChartData$ = this.service.loadServerChartData();
-    this.supportRequestData$ = this.service.loadSupportRequestData();
-    this.visitsChartData$ = this.service.loadVisitsChartData();
-    this.projectsStatsData$ = this.service.loadProjectsStatsData();
+  constructor(
+    private service: DashboardService,
+    private errorService: ErrorHandlerService
+  ) {
+
+    this.userType = localStorage.getItem('userType');
+
+    if(this.userType === 'admin') {
+      this.service.adminDashboardDetails().subscribe({
+        next: (v) => {
+          this.visitsChartData$ = {
+            userCounts: v.data.userCount,
+            todaySurveyCount: v.data.todaySurveyCount,
+            totalUserSurveyCount: v.data.userSurvey.totalCount,
+          }
+          this.revenueChartData$ = {
+            pending: v.data.userSurvey.pendingCount,
+            submitted: v.data.userSurvey.submittedCount
+          }
+  
+          this.supportRequestData$ = v.data.userSurveyListDetails
+    
+        },
+        error: (e) => {
+          this.errorService.handleError(e);
+        }
+      })
+    }
+
+    if(this.userType === 'user') {
+      this.service.userDashboardDetails().subscribe({
+        next: (v) => {
+  
+          this.supportRequestData$ = v.data.userSurveyListDetails
+    
+        },
+        error: (e) => {
+          this.errorService.handleError(e);
+        }
+      })
+    }
+
   }
 }

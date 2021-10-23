@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 import {
   DailyLineChartData,
@@ -16,6 +18,11 @@ import {
   providedIn: 'root'
 })
 export class DashboardService {
+
+  BASE_URL = environment.apiBaseUrl;
+
+  constructor(public http: HttpClient) { }
+
   public loadDailyLineChartData(): Observable<DailyLineChartData> {
     return of({
       dailyData: {
@@ -53,15 +60,6 @@ export class DashboardService {
     return of({
       integration: 40,
       sdk: 75
-    });
-  }
-
-  public loadRevenueChartData(): Observable<RevenueChartData> {
-    return of({
-      groupA: Math.round(Math.random() * 100),
-      groupB: Math.round(Math.random() * 100),
-      groupC: Math.round(Math.random() * 100),
-      groupD: Math.round(Math.random() * 100)
     });
   }
 
@@ -147,16 +145,6 @@ export class DashboardService {
       city: 'Hanoverton',
       status: 'send'
     }]);
-  }
-
-  public loadVisitsChartData(): Observable<VisitsChartData> {
-    return of({
-      data: [7, 6, 3, 8, 10, 6, 7, 8, 3, 0, 7, 6, 2, 7, 4, 7, 3, 6, 2, 3, 8, 1, 0, 4, 9],
-      registration: '860',
-      signOut: '32',
-      rate: '3.25',
-      all: '12.678'
-    });
   }
 
   public loadProjectsStatsData(): Observable<ProjectStatData> {
@@ -267,5 +255,29 @@ export class DashboardService {
         }
       }
     });
+  }
+
+  public adminDashboardDetails(): Observable<any> {
+    try {
+      const apiUrl = `${this.BASE_URL}/admin/dashboard-details`;
+      return this.http.get(apiUrl, {
+        headers: new HttpHeaders()
+          .set('Authorization', `Bearer ${localStorage.getItem('token')}`),
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  public userDashboardDetails(): Observable<any> {
+    try {
+      const apiUrl = `${this.BASE_URL}/user/dashboard-details`;
+      return this.http.get(apiUrl, {
+        headers: new HttpHeaders()
+          .set('Authorization', `Bearer ${localStorage.getItem('token')}`),
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 }

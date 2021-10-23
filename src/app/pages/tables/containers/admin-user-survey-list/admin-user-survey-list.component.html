@@ -1,0 +1,84 @@
+<app-layout>
+    <mat-toolbar class="page-header" role="heading">
+        <h1>User Survey Logs</h1>
+    </mat-toolbar>
+
+    <div class="tables-wrapper">
+        <mat-card class="employee-table-wrapper">
+            <mat-card-title class="employee-table-wrapper__header">
+                <p *ngIf="!isShowFilterInput" class="employee-table-wrapper__title">Log List</p>
+                <div *ngIf="isShowFilterInput" class="employee-table-wrapper__search">
+                    <div class="employee-table-wrapper__icon-wrapper">
+                        <mat-icon class="employee-table-wrapper__icon">search</mat-icon>
+                    </div>
+                    <input matInput class="employee-table-wrapper__search-input" (keyup)="applyFilter($event)">
+                    <button class="employee-table-wrapper__button" mat-mini-fab (click)="showFilterInput()">
+                        <mat-icon class="employee-table-wrapper__icon">close</mat-icon>
+                    </button>
+                </div>
+                <button class="employee-table-wrapper__button" mat-mini-fab (click)="showFilterInput()">
+                    <mat-icon class="employee-table-wrapper__icon">search</mat-icon>
+                </button>
+            </mat-card-title>
+            <mat-card-content class="employee-table__content">
+                <table class="employee-table__table" mat-table [dataSource]="dataSource">
+
+                    <!-- Survey Log Serial Number Column -->
+                    <ng-container matColumnDef="serialNum">
+                        <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> Sr. No. </th>
+                        <td class="employee-table__table-body" mat-cell *matCellDef="let element; let i = index;"> {{i +
+                            1}}. </td>
+                    </ng-container>
+
+                    <!-- Survey Log User Name Column -->
+                    <ng-container matColumnDef="userName">
+                        <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> User Name </th>
+                        <td class="employee-table__table-body" mat-cell *matCellDef="let element"> {{element?.name}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Survey Log Survey Name Column -->
+                    <ng-container matColumnDef="surveyName">
+                        <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> Survey Name </th>
+                        <td class="employee-table__table-body" mat-cell *matCellDef="let element">
+                            {{element?.surveyName}} </td>
+                    </ng-container>
+
+                    <!-- Survey Log Email Status Column -->
+                    <ng-container matColumnDef="emailStatus">
+                        <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> Email Status </th>
+                        <td class="employee-table__table-body" mat-cell *matCellDef="let element">
+                            <span
+                                [ngClass]=" element?.userSurveyEmailStatus === 'Failed' ? 'email-status-failed' : 'email-status-success' ">{{element?.userSurveyEmailStatus}}</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Survey Log User Status Column -->
+                    <ng-container matColumnDef="userStatus">
+                        <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> User Status </th>
+                        <td class="employee-table__table-body" mat-cell *matCellDef="let element">
+                            <span
+                                [ngClass]=" element?.userSurveyStatus === 'Pending' ? 'user-status-pending' : 'user-status-success' ">{{element?.userSurveyStatus}}</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Survey Log Creation Column -->
+                    <ng-container matColumnDef="createdAt">
+                        <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> Log Creation </th>
+                        <td class="employee-table__table-body" mat-cell *matCellDef="let element"> {{element?.createdAt
+                            | date : 'dd
+                            MMM y'}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+                    </tr>
+                </table>
+            </mat-card-content>
+            <div class="pagination">
+                <mat-paginator [pageSizeOptions]="[10, 15, 100]" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-card>
+    </div>
+
+</app-layout>

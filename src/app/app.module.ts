@@ -13,6 +13,9 @@ import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { AuthModule } from './pages/auth/auth.module';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { HttpClientModule } from '@angular/common/http';
+import { CreateSurveyModule } from './pages/create-survey/create-survey.module';
+import { EditUserSurveyModule } from './pages/edit-user-survey/edit-user-survey.module';
 
 @NgModule({
   declarations: [
@@ -30,9 +33,12 @@ import { NgxEchartsModule } from 'ngx-echarts';
     ToastrModule.forRoot(),
     MatCardModule,
     MatButtonModule,
+    HttpClientModule,
+    EditUserSurveyModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
-    })
+    }),
+    CreateSurveyModule
   ],
   providers: [],
   bootstrap: [AppComponent]

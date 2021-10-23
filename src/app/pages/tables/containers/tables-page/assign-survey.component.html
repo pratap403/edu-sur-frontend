@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Hello Admin</h1>
+<div mat-dialog-content>
+
+    <p>Send Invitation to Selected User. Please Select the User.</p>
+    <form class="form" [formGroup]="form">
+        <mat-form-field appearance="fill">
+            <mat-select formControlName="usersId" placeholder="Select User" multiple>
+                <mat-option *ngFor="let user of userList" [value]="user._id">{{user.name}}</mat-option>
+            </mat-select>
+            <mat-error>
+                This field is required.
+            </mat-error>
+        </mat-form-field>
+    </form>
+
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onSubmit()" [disabled]="form.invalid">Send Invite</button>
+</div>

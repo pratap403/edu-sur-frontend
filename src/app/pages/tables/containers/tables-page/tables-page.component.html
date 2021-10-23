@@ -1,12 +1,73 @@
 <app-layout>
   <mat-toolbar class="page-header" role="heading">
-    <h1>Tables</h1>
+    <h1>Created Survey</h1>
   </mat-toolbar>
 
   <div class="tables-wrapper">
-    <app-employee-table [employeeTableData]="employeeTableData$ | async"></app-employee-table>
-    <app-material-table [materialTableDate]="materialTableData$ | async"></app-material-table>
+    <mat-card class="employee-table-wrapper">
+      <mat-card-title class="employee-table-wrapper__header">
+        <p *ngIf="!isShowFilterInput" class="employee-table-wrapper__title">Survey List</p>
+        <div *ngIf="isShowFilterInput" class="employee-table-wrapper__search">
+          <div class="employee-table-wrapper__icon-wrapper">
+            <mat-icon class="employee-table-wrapper__icon">search</mat-icon>
+          </div>
+          <input matInput class="employee-table-wrapper__search-input" (keyup)="applyFilter($event)">
+          <button class="employee-table-wrapper__button" mat-mini-fab (click)="showFilterInput()">
+            <mat-icon class="employee-table-wrapper__icon">close</mat-icon>
+          </button>
+        </div>
+        <button class="employee-table-wrapper__button" mat-mini-fab (click)="showFilterInput()">
+          <mat-icon class="employee-table-wrapper__icon">search</mat-icon>
+        </button>
+      </mat-card-title>
+      <mat-card-content class="employee-table__content">
+        <table class="employee-table__table" mat-table [dataSource]="dataSource">
+
+          <!-- Survey Name Column -->
+          <ng-container matColumnDef="serialNum">
+            <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> Sr. No. </th>
+            <td class="employee-table__table-body" mat-cell *matCellDef="let element; let i = index;"> {{i + 1}}. </td>
+          </ng-container>
+
+          <!-- Survey Name Column -->
+          <ng-container matColumnDef="surveyTitle">
+            <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> Survey Title </th>
+            <td class="employee-table__table-body" mat-cell *matCellDef="let element"> {{element?.surveyTitle}} </td>
+          </ng-container>
+
+          <!-- Survey Type Column -->
+          <ng-container matColumnDef="surveyType">
+            <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> Survey Type </th>
+            <td class="employee-table__table-body" mat-cell *matCellDef="let element"> {{element?.surveyType}} </td>
+          </ng-container>
+
+          <!-- Survey Creation Column -->
+          <ng-container matColumnDef="createdAt">
+            <th class="employee-table__table-header" mat-header-cell *matHeaderCellDef> Survey Creation </th>
+            <td class="employee-table__table-body" mat-cell *matCellDef="let element"> {{element?.createdAt | date : 'dd
+              MMM y'}} </td>
+          </ng-container>
+
+          <!-- Survey Action Column -->
+          <ng-container matColumnDef="view_button">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="primary"
+                matTooltip="Share Survey To User" (click)="openDialog(element?._id)">
+                <mat-icon style="color: #d32f2f" class="mat-18">share</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+          </tr>
+        </table>
+      </mat-card-content>
+      <div class="pagination">
+        <mat-paginator [pageSizeOptions]="[10, 15, 100]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card>
   </div>
 
-  <app-footer></app-footer>
 </app-layout>

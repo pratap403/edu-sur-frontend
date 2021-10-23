@@ -1,0 +1,47 @@
+<app-layout>
+
+    <h2 class="page-title">Edit Survey</h2>
+    <mat-card>
+
+        <label class="survey-title" for="surveyTitle">{{formDetails?.surveyTitle}}</label>
+        <br>
+        <br>
+        <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()" autocomplete="off">
+            <div *ngFor="let controls of formDetails?.surveyQuestion">
+
+                <mat-form-field class="full-width" *ngIf="controls.type === 'Text' ">
+                    <input [formControlName]="controls.key" matInput [placeholder]="controls.text"
+                        [required]="controls.isAnswerRequired">
+                </mat-form-field>
+
+                <mat-form-field class="full-width" *ngIf="controls.type === 'Single choice' ">
+                    <mat-select [formControlName]="controls.key" [placeholder]="controls.text"
+                        [required]="controls.isAnswerRequired">
+                        <mat-option *ngFor="let choice of controls.options" [value]="choice">
+                            {{choice}}
+
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="full-width" *ngIf="controls.type === 'Multi choice' ">
+                    <mat-select [formControlName]="controls.key" [placeholder]="controls.text"
+                        [required]="controls.isAnswerRequired" multiple>
+                        <mat-option *ngFor="let choice of controls.options" [value]="choice">
+                            {{choice}}
+
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+
+            <div class="button-row">
+                <button class="full-width" color="primary" type="submit" mat-raised-button [disabled]="!surveyForm.valid">
+                    Submit Answer
+                </button>
+              </div>
+        </form>
+    </mat-card>
+
+</app-layout>

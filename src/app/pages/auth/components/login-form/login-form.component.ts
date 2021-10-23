@@ -1,5 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services';
+import { routes } from '../../../../consts';
+
 
 @Component({
   selector: 'app-login-form',
@@ -7,21 +12,61 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
-  @Output() sendLoginForm = new EventEmitter<void>();
+  constructor(
+    private service: AuthService,
+    private router: Router,
+    private toastrService: ToastrService
+  ) { }
+  @Output() sendLoginForm = new EventEmitter<any>();
   public form: FormGroup;
-  public flatlogicEmail = 'admin@flatlogic.com';
-  public flatlogicPassword = 'admin';
+  public routers: typeof routes = routes;
+
 
   public ngOnInit(): void {
     this.form = new FormGroup({
-      email: new FormControl(this.flatlogicEmail, [Validators.required, Validators.email]),
-      password: new FormControl(this.flatlogicPassword, [Validators.required])
+      username: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required])
     });
   }
 
-  public login(): void {
+  public login(): any {
+
     if (this.form.valid) {
-      this.sendLoginForm.emit();
+
+      this.service.login(this.form.value).subscribe({
+        next: (v) => {
+
+          if (v.status === 'success') {
+
+            localStorage.setItem('token', v.data.token);
+            localStorage.setItem('userType', v.data.userType);
+            localStorage.setItem('email', v.data.email);
+            localStorage.setItem('userName', `${v.data.firstName} ${v.data.lastName}`);
+            this.toastrService.success(
+              v.message, 'Login'
+            );
+            this.router.navigate([this.routers.DASHBOARD]);
+
+          }
+
+          if (v.status === 'error') {
+
+            this.toastrService.error(
+              v.message, 'Login'
+            );
+
+          }
+
+
+        },
+        error: (e) => {
+          this.toastrService.error(
+            e.message, 'Login'
+          )
+        },
+      })
+
     }
+
   }
 }

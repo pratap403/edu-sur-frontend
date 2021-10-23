@@ -1,7 +1,9 @@
 export interface VisitsChartData {
-  data: number[];
-  registration: string;
-  signOut: string;
-  rate: string;
-  all: string;
+  userCounts: any,
+  todaySurveyCount: any,
+  userSurvey: {
+    pendingCount: any,
+    submittedCount: any,
+    totalCount: any
+  },
 }

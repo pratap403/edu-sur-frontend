@@ -9,6 +9,6 @@ import { colors } from '../../../../consts';
   styleUrls: ['./visits-chart.component.scss']
 })
 export class VisitsChartComponent {
-  @Input() visitsChartData: VisitsChartData;
+  @Input() visitsChartData: any;
   public colors: typeof colors = colors;
 }
